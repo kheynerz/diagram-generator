@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+import { Router } from 'express';
+var router = Router();
 
 
 router.get('/', function(_, res) {
@@ -12,4 +12,4 @@ router.get('/', function(_, res) {
   res.json(data);
 });
 
-module.exports = router;
+export default router;
