@@ -1,17 +1,11 @@
-const http = require('http')
 const app = require('./app')
-const config = require('./config')
 
+app.set('port', 3000)
 
-app.set('port', config.server.port)
+app.listen(app.get('port'), () => {
+    console.log('Server listening on port 3000')
+})
 
-
-const server = http.createServer(app);
-
-server.listen(app.get('port'), () =>{
-    console.log(`Server listening on port ${app.get('port')}`);
-});
-
-server.on('error', (err) =>{
-    console.log(`Error en el servidor`);
+app.on('error', (err) =>{
+    console.log(`Se produjo un error en el servidor: ${err}`);
 })

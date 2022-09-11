@@ -1,27 +1,21 @@
-//Dependencies
-import express, { json } from 'express';
-import helmet from 'helmet';
-import logger from 'morgan';
-import cors from 'cors';
+const express = require('express')
+const helmet = require('helmet')
+const logger = require('morgan')
+const cors = require('cors')
 
-//Endpoint routes
-import index from './routes/index';
 
 const app = express()
 
 //Middlewares
 app.use(helmet())
 app.use(logger('dev'))
-app.use(json())
+app.use(express.json())
 app.use(cors())
 
-
-//Endpoints
-
-app.use('/', index)
+//Routes
+const indexRoute = require('./routes/index')
 
 
+app.use(indexRoute);
 
-
-  
-export default app;
+module.exports = app;
