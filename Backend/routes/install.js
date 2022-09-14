@@ -12,3 +12,10 @@ router.post('/install', function(req, res) {
 });
   
 module.exports = router;
+
+router.get('/checkInstall', (req,res) => {
+    installController
+      .checkSchema(req.body)
+      .then(result => res.json(result))
+      .catch(err => res.status(err.code).json(err))
+})
