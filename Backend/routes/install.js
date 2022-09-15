@@ -8,14 +8,14 @@ router.post('/install', function(req, res) {
     installController
       .installProcedures(req.body)
       .then((result) => res.json(result))
-      .catch((err) => res.status(err.code).json(err));
+      .catch((err) => res.json(err));
 });
   
 module.exports = router;
 
-router.get('/checkInstall', (req,res) => {
+router.get('/install', (req,res) => {
     installController
       .checkSchema(req.body)
-      .then(result => res.json(result))
-      .catch(err => res.status(err.code).json(err))
+      .then(result => {res.json(result)})
+      .catch(err => res.json(err))
 })
