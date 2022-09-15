@@ -10,3 +10,8 @@ exports.installProcedures = async (config) => {
   }
   return execute(config, script, "Wrong Credentials", "Installation Complete");
 }
+
+
+exports.checkSchema = async (config) => {
+  return db.execute(config, 'SELECT plantuml_generated.check_schema();', 'Not installed', 'Success')
+}

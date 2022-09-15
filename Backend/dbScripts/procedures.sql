@@ -122,3 +122,18 @@ END
 $$
 LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION plantuml_generated.check_schema()
+RETURNS BOOL
+SECURITY DEFINER
+AS $$
+DECLARE
+	checked BOOL;
+BEGIN 
+	SELECT (COUNT(routine_name) = 4) from information_schema.routines
+	WHERE routines.specific_schema='plantuml_generated'
+		AND routine_name in ('get_schemas', 'get_tables', 'get_table_data', 'get_json')
+	INTO checked;
+	RETURN checked;
+END
+$$
+LANGUAGE 'plpgsql';
