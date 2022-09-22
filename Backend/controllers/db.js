@@ -14,7 +14,6 @@ exports.execute = (config, query, rejMsg, resolveMsg) => {
             await client.end();
           })
           .catch(_ => reject({msg: rejMsg, res: false}))
-         
       }
     });
   });

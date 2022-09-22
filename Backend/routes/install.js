@@ -11,11 +11,11 @@ router.post('/install', function(req, res) {
       .catch((err) => res.json(err));
 });
   
-module.exports = router;
-
 router.get('/install', (req,res) => {
     installController
-      .checkSchema(req.body)
+      .checkSchema(req.query)
       .then(result => {res.json(result)})
       .catch(err => res.json(err))
 })
+
+module.exports = router;
