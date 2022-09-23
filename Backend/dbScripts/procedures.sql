@@ -12,36 +12,76 @@ $$
 LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION plantuml_generated.get_tables()
-RETURNS TABLE (t_name VARCHAR, t_schema VARCHAR) 
+CREATE OR REPLACE FUNCTION plantuml_generated.getConstraints(p_schema varchar, p_table_name varchar)
+RETURNS VARCHAR
 SECURITY DEFINER
 AS $$
+DECLARE
+	curs_constr REFCURSOR;
+	
+	res varchar;
+	
+	constr_name varchar;
+	col_name varchar;
+	fn_ts varchar;
+	fn_tn varchar;
+	fn_col varchar;
+	
+	
+	constraint_found BOOL;
 BEGIN
-	RETURN QUERY SELECT table_name::VARCHAR, table_schema::VARCHAR
-		FROM information_schema.tables
-		WHERE table_type = 'BASE TABLE' AND table_schema NOT IN ('pg_catalog','information_schema');
+		
+		res := '[';
+		constraint_found := false;
+		OPEN curs_constr FOR SELECT
+			tc.constraint_name, 
+			kcu.column_name, 
+			ccu.table_schema AS foreign_table_schema,
+			ccu.table_name AS foreign_table_name,
+			ccu.column_name AS foreign_column_name 
+		FROM 
+			information_schema.table_constraints AS tc 
+			JOIN information_schema.key_column_usage AS kcu
+			  ON tc.constraint_name = kcu.constraint_name
+			JOIN information_schema.constraint_column_usage AS ccu
+			  ON ccu.constraint_name = tc.constraint_name
+		WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_name= p_table_name AND tc.table_schema = p_schema;
+		
+		LOOP 
+			FETCH curs_constr into constr_name, col_name, fn_ts, fn_tn, fn_col;
+			IF NOT FOUND THEN
+			
+				IF constraint_found THEN 
+					res := SUBSTRING(res, 1, LENGTH(res)-1);
+				END IF;
+				
+				res := res || ']';
+				
+				EXIT;
+			END IF;
+			
+			res := res || '{' || '"schema" : "' ||  p_schema || '",' ||
+											'"table" : "' || p_table_name || '",' || 
+											'"col" : "' || col_name  || '",' ||
+											'"constraint_name" : "' || constr_name  || '",' ||
+											'"foreign_schema" : "' || fn_ts  || '",' ||
+											'"foreign_table" : "' || fn_tn  || '",' ||
+											'"foreign_col" : "' || fn_col  || '"},';
+			
+			constraint_found := true;
+			
+		END LOOP;
+		
+		CLOSE curs_constr;
+	
+	RETURN res;
+
 END
 $$
 LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION plantuml_generated.get_table_data(p_table_name VARCHAR, p_table_schema VARCHAR)
-RETURNS TABLE (
-        t_column VARCHAR,
-        t_data_type VARCHAR) 
-SECURITY DEFINER
-AS $$
-BEGIN
-	RETURN QUERY SELECT column_name::VARCHAR, data_type::VARCHAR 
-		FROM information_schema.columns 
-		WHERE table_name = p_table_name AND table_schema = p_table_schema;
-END
-$$
-LANGUAGE 'plpgsql';
-
 
 CREATE OR REPLACE FUNCTION plantuml_generated.get_json()
-RETURNS JSON
+RETURNS VARCHAR
 SECURITY DEFINER
 AS $$
 DECLARE 
@@ -55,10 +95,13 @@ DECLARE
 	v_column_name VARCHAR;
 	v_data_type VARCHAR;
 	
+	
+	v_constraints VARCHAR;
+	
 	v_tables_found BOOL;
 	v_columns_found BOOL;
 BEGIN
-	v_json := '{';
+	v_json := '[';
 	v_tables_found = 'false';
 	v_columns_found = 'false';
 	
@@ -67,7 +110,7 @@ BEGIN
 		FETCH v_schemas INTO v_schema;
 		IF FOUND THEN
 			v_tables_found = 'false';
-			v_json := v_json || E'\n\t"' || v_schema || '" : {';
+			v_json := v_json || '{"nombre" : "'||v_schema || '",' || '"tablas": [';
 			OPEN v_tables FOR SELECT table_name::VARCHAR, table_schema::VARCHAR
 						FROM information_schema.tables
 						WHERE table_type = 'BASE TABLE' AND table_schema = v_schema;
@@ -76,7 +119,7 @@ BEGIN
 				IF FOUND THEN
 					v_tables_found = 'true';
 					v_columns_found = 'false';
-					v_json := v_json || E'\n\t\t"' || v_table_name || '" : {';
+					v_json := v_json || '{' || '"nombre" : "' || v_table_name || '",' || '"atributos" : [';
 					OPEN v_columns FOR SELECT column_name::VARCHAR, data_type::VARCHAR 
 						FROM information_schema.columns 
 						WHERE table_name = v_table_name AND table_schema = v_table_schema;
@@ -84,56 +127,43 @@ BEGIN
 						FETCH v_columns into v_column_name, v_data_type;
 						IF FOUND THEN
 							v_columns_found = 'true';
-							v_json := v_json || E'\n\t\t\t"' || v_column_name || '" : "' || v_data_type || '",';
+							v_json := v_json || '{' || '"nombre" : "' || v_column_name || '","dato" : "' || v_data_type || '"},';
 						ELSE
 							RAISE NOTICE '%',v_columns_found;	
 							IF v_columns_found THEN
 								v_json := SUBSTRING(v_json,1,LENGTH(v_json)-1);
 							END IF;
-							v_json := v_json || E'\n\t\t}';
+							v_json := v_json || ']';
 							EXIT;
 						END IF;
 					
 					END LOOP;
-					
 					CLOSE v_columns;
-					v_json := v_json || ',';
+					
+					SELECT plantuml_generated.getConstraints(v_table_schema,v_table_name) into v_constraints;
+					
+					v_json := v_json || ',"constraints" : ' || v_constraints;
+					 
+					v_json := v_json || '},';
 				ELSE
 					IF v_tables_found THEN
 						v_json := SUBSTRING(v_json,1,LENGTH(v_json)-1);
 					END IF;
+					v_json := v_json || ']';
 					EXIT;
 				END IF;
 			END LOOP;
 			CLOSE v_tables;
-			v_json := v_json || E'\n\t},';
+			v_json := v_json || '},';
 		ELSE
 			EXIT;
 		End If;
 	END LOOP;
 	
 	CLOSE v_schemas;
-	v_json := SUBSTRING(v_json,1,LENGTH(v_json)-1) || E'\n}';
+	v_json := SUBSTRING(v_json,1,LENGTH(v_json)-1) || ']';
 	
-	RAISE NOTICE E'\n%',v_json;
-	
-	RETURN v_json::JSON;
-END
-$$
-LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION plantuml_generated.check_schema()
-RETURNS BOOL
-SECURITY DEFINER
-AS $$
-DECLARE
-	checked BOOL;
-BEGIN 
-	SELECT (COUNT(routine_name) = 4) from information_schema.routines
-	WHERE routines.specific_schema='plantuml_generated'
-		AND routine_name in ('get_schemas', 'get_tables', 'get_table_data', 'get_json')
-	INTO checked;
-	RETURN checked;
+	RETURN v_json;
 END
 $$
 LANGUAGE 'plpgsql';
