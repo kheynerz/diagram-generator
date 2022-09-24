@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Test from './components/Test';
 import Login from './components/Login'
 
+import Projects from './components/Projects';
 
 const App = () => {
   return (
@@ -20,9 +21,8 @@ const App = () => {
               <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route element={<ProtectedRoute/>}>
-                <Route path="projects" element={ <h1>Hello world</h1>}/>
+                <Route path="projects" element={<Projects/>}/>
               </Route>
-
               <Route path='testing' element={<Test/>}/>
 
             </Routes>
@@ -34,8 +34,3 @@ const App = () => {
 }
 
 export default App
-
-
-  /*   <CredentialsContextProvider>
-      <Login/>
-    </CredentialsContextProvider> */
