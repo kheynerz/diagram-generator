@@ -1,34 +1,37 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-import { Snackbar } from '../Snackbar'
 import { useState, useContext} from 'react';
 
 import { installProcedures } from '../../helpers/installProcedures';
 import { CredentialsContext } from '../../context/CredentialsContext';
+import Install from '../Install';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const CheckInstallModal = () => {
   const [show, setShow] = useState(true)
-  const [showAlert, setShowAlert] = useState(false)
-
-  const credentials = useContext(CredentialsContext)
+  const [install, setInstall] = useState(false)
+  const {credentials} = useContext(CredentialsContext)
+  const {setAuth} = useContext(AuthContext)
 
   const handleClick = async () => {
     const installed = await installProcedures(credentials)
     if (installed){
       setShow(false)
-      setShowAlert(true)
+      setInstall(true)
     }
+  } 
 
-  }
-
-  if (showAlert) return <Snackbar body='Instalacion completada' header='Completado' variant='success' />
+  if (install) return <Install/>
 
   return (
       <Modal
         show={show}
-        onHide={() => setShow(false)}
+        onHide={() => {
+          setShow(false) 
+          setAuth(false)
+        }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         backdrop="static"

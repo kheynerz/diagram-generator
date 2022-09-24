@@ -7,7 +7,7 @@ export const useCheckInstall = () => {
     const [installed, setInstalled] = useState(false) 
     const [fetching, setFetching] = useState(true) 
     const [connected, setConnected] = useState(false) 
-    const params = useContext(CredentialsContext)
+    const {credentials, setCredentials} = useContext(CredentialsContext)
     
     const handleResponse = ({res, connect}) =>{
         setConnected(connect)
@@ -15,7 +15,7 @@ export const useCheckInstall = () => {
     }
 
     useEffect(() => {
-        getService('install', {params})
+        getService('install', {params: credentials})
             .then(res =>  handleResponse(res.data))
             .finally(_ => setFetching(false))
     }, []);
