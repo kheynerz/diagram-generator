@@ -1,13 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
-import Login from '../login/login'
-import Schema from '../Schema/Schema'
-import Tables from '../Tables/Tables'
+import { CredentialsContextProvider } from './context/CredentialsContext';
+
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Tables />
+    <CredentialsContextProvider>
+      <App/>
+    </CredentialsContextProvider>
   </React.StrictMode>
 )

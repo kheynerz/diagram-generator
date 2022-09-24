@@ -33,7 +33,7 @@ const CheckInstall = () => {
     }
 
     return (
-        <CheckInstallModal show={modalShow} onHide={() => setModalShow(false)} onClick={handleClick} />
+        <CheckInstallModal show={modalShow} onHide={() => setModalShow(false)} onClickInstall={handleClick} />
   )
 }
 

@@ -10,8 +10,7 @@ const tablas=[
     {nombre:'prueba', columnas: ['aulas(int)','profesores(String)']} 
 ];
 
-
-function Schema() {
+const Tables = () => {
 
   return (
     <>
@@ -40,4 +39,4 @@ function Schema() {
 }
 
 
-export default Schema;
+export default Tables;
