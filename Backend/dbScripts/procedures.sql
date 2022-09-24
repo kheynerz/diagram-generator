@@ -1,5 +1,11 @@
 CREATE SCHEMA IF NOT EXISTS plantuml_generated;
 
+CREATE TABLE IF NOT EXISTS plantuml_generated.projects(
+	user_id SERIAL PRIMARY KEY,
+	username varchar(20) UNIQUE NOT NULL,
+	projects JSON NOT NULL
+);
+
 CREATE OR REPLACE FUNCTION plantuml_generated.get_schemas()
 RETURNS TABLE (s_name VARCHAR) 
 SECURITY DEFINER
@@ -176,11 +182,36 @@ AS $$
 DECLARE
     checked BOOL;
 BEGIN 
-    SELECT (COUNT(routine_name) = 3) from information_schema.routines
+    SELECT (COUNT(routine_name) = 4) from information_schema.routines
     WHERE routines.specific_schema='plantuml_generated'
-        AND routine_name in ('get_schemas', 'get_constraints', 'get_json')
+        AND routine_name in ('get_schemas', 'get_constraints', 'get_json', 'get_projects')
     INTO checked;
     RETURN checked;
+END
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION plantuml_generated.get_projects(p_username varchar(20))
+RETURNS JSON
+SECURITY DEFINER
+AS $$
+DECLARE
+    usernameExists BOOL;
+	projectsJson JSON;
+BEGIN 
+    SELECT COUNT(projects) > 0 FROM plantuml_generated.projects 
+	WHERE username = p_username
+    INTO usernameExists;
+	
+	projectsJson := '{}';
+	IF (usernameExists) THEN
+		SELECT projects FROM plantuml_generated.projects 
+		WHERE username = p_username
+		INTO projectsJson;
+	END IF; 
+	
+	RETURN projectsJson;
 END
 $$
 LANGUAGE 'plpgsql';
