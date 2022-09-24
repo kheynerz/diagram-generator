@@ -8,14 +8,14 @@ export const useGetProjects = () => {
     const [projects, setProjects] = useState({}) 
     const [fetching, setFetching] = useState(true) 
     
-    const params = useContext(CredentialsContext)
+    const {credentials} = useContext(CredentialsContext)
 
     const handleResponse = (res) =>{
         setProjects(res.res)
     }
 
     useEffect(() => {
-        getService('projects', {params})
+        getService('projects', {params: credentials})
             .then(res => {
                 handleResponse(res.data)}
             )
