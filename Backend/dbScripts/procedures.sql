@@ -193,12 +193,12 @@ LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION plantuml_generated.get_projects(p_username varchar(20))
-RETURNS JSON
+RETURNS VARCHAR
 SECURITY DEFINER
 AS $$
 DECLARE
     usernameExists BOOL;
-	projectsJson JSON;
+	projectsJson VARCHAR;
 BEGIN 
     SELECT COUNT(projects) > 0 FROM plantuml_generated.projects 
 	WHERE username = p_username

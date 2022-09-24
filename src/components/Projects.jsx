@@ -23,8 +23,9 @@ const Project = () => {
                     </Card>
                 )): <h3>Primer proyecto: </h3>}
                 <Button variant="primary" style={{ width: '18rem' , margin:'10px', fontSize:'60px'}}>+</Button>
+                
             </div>
-            
+            {console.log(projects)}
         </>
     );
 }

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
 const projectsController = require('../controllers/projects')
-
 
 router.get('/projects', (req,res) =>{
     projectsController.getProjects(req.query)
