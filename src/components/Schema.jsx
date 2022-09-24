@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 
 const schemas=['Schema1','Scehma2','Schema3'];
 
-function Schema() {
+const Schema = () => {
 
   return (
 
