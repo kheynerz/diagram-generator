@@ -1,40 +1,18 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import axios from 'axios'
-
-const baseURL = "http://localhost:3000";
-
 import CheckInstallModal from './Modals/CheckInstallModal';
+import { useCheckInstall } from '../hooks/useCheckInstall';
+
+
 
 const CheckInstall = () => {
-    const [modalShow, setModalShow] = useState(false)
+    const {installed, fetching, connected} = useCheckInstall()
 
-    const params = {
-        host: "localhost",
-        database : "test",
-        port : 5432,
-        user : "postgres",
-        password : "1234"
-      };
+    if (fetching) return <p>Loading...</p>
+    if (installed) return <h1>Instalado</h1>
+    if (connected) return <CheckInstallModal  />
 
-    useEffect(() => {
-        axios.get(`${baseURL}/install`,{params})
-            .then(res => {
-                if(!res.data.res[0]?.check_schema){
-                    setModalShow(true)
-                }
-            })
-            .catch(err => console.log(err))
-    }, [])
-    
-
-    const handleClick = () => {
-        console.log('Hello');
-    }
-
-    return (
-        <CheckInstallModal show={modalShow} onHide={() => setModalShow(false)} onClickInstall={handleClick} />
-  )
+    return  <h1>bad credentials</h1>
 }
 
 export default CheckInstall
+
+

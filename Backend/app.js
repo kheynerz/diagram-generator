@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(cors())
 
 
-//Endpoint routes
+//Endpoint routes 
 const index = require('./routes/index');
 const install = require('./routes/install');
 const structure = require('./routes/structure');
