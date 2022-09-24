@@ -10,6 +10,7 @@ import Test from './components/Test';
 import Login from './components/Login'
 
 import Projects from './components/Projects';
+import NewProject from './components/NewProject';
 
 const App = () => {
   return (
@@ -20,11 +21,12 @@ const App = () => {
             <Routes>
               <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
-              <Route path="projects" element={<Projects/>}/>
               <Route element={<ProtectedRoute/>}>
-                
+              
               </Route>
               <Route path='testing' element={<Test/>}/>
+              <Route path="projects" element={<Projects/>}/>
+              <Route path="newProject" element={<NewProject/>}/>
 
             </Routes>
           </Router>
