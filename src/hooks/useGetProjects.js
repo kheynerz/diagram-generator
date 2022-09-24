@@ -8,7 +8,7 @@ export const useGetProjects = () => {
     const [projects, setProjects] = useState({}) 
     const [fetching, setFetching] = useState(true) 
     
-    const {credentials} = useContext(CredentialsContext)
+    const params = useContext(CredentialsContext).credentials
 
     const handleResponse = (res) =>{
         setProjects(res.res)
