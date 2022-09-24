@@ -14,7 +14,7 @@ export const CredentialsContextProvider = (props) =>{
     })
 
     return(
-        <CredentialsContext.Provider  value={credentials}>
+        <CredentialsContext.Provider  value={{credentials,setCredentials}}>
             {props.children}
         </CredentialsContext.Provider>
     )
