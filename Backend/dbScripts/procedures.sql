@@ -12,7 +12,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION plantuml_generated.getConstraints(p_schema varchar, p_table_name varchar)
+CREATE OR REPLACE FUNCTION plantuml_generated.get_constraints(p_schema varchar, p_table_name varchar)
 RETURNS VARCHAR
 SECURITY DEFINER
 AS $$
@@ -140,7 +140,7 @@ BEGIN
 					END LOOP;
 					CLOSE v_columns;
 					
-					SELECT plantuml_generated.getConstraints(v_table_schema,v_table_name) into v_constraints;
+					SELECT plantuml_generated.get_constraints(v_table_schema,v_table_name) into v_constraints;
 					
 					v_json := v_json || ',"constraints" : ' || v_constraints;
 					 
@@ -164,6 +164,23 @@ BEGIN
 	v_json := SUBSTRING(v_json,1,LENGTH(v_json)-1) || ']';
 	
 	RETURN v_json;
+END
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION plantuml_generated.check_schema()
+RETURNS BOOL
+SECURITY DEFINER
+AS $$
+DECLARE
+    checked BOOL;
+BEGIN 
+    SELECT (COUNT(routine_name) = 3) from information_schema.routines
+    WHERE routines.specific_schema='plantuml_generated'
+        AND routine_name in ('get_schemas', 'get_constraints', 'get_json')
+    INTO checked;
+    RETURN checked;
 END
 $$
 LANGUAGE 'plpgsql';

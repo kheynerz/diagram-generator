@@ -14,14 +14,7 @@ router.post('/install', function(req, res) {
 router.get('/install', (req,res) => {
     installController
       .checkSchema(req.query)
-      .then(result => {
-        if(result.connect){
-          result.rows.res = result.rows.res[0].check_schema
-          res.json(result)
-        }else{
-          res.json(result)
-        }
-      })
+      .then(result => res.json({...result, res : result.res[0].check_schema}))
       .catch(err => res.json(err))
 })
 

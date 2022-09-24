@@ -10,9 +10,12 @@ exports.execute = (config, query, rejMsg, resolveMsg) => {
 
   const client = new Client(config);
 
+  console.log('Entro aca');
   const promise = new Promise((resolve, reject) => {
     client.connect(async (err) => {
       if (err) {
+        console.log('Error de conexion');
+
         reject({msg: 'Bad Credentials', res: false, connect : false, success: false});
       } else {
         client.query(query)
