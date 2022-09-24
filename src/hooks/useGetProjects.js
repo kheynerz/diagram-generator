@@ -15,7 +15,7 @@ export const useGetProjects = () => {
     }
 
     useEffect(() => {
-        getService('projects', {params: credentials})
+        getService('projects', {params})
             .then(res => {
                 handleResponse(res.data)}
             )

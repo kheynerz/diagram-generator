@@ -65,6 +65,7 @@ const Login = () => {
       <FloatingLabel className="mb-3" label="Clave" controlId="formBasicClave">
         <Form.Control onChange={handleChange} type="text" placeholder="Clave" name="password"/>
       </FloatingLabel>
+      
       <Button onClick={handleClick} variant="primary" size="lg" >
         Conectar
       </Button>
