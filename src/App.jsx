@@ -20,8 +20,9 @@ const App = () => {
             <Routes>
               <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
+              <Route path="projects" element={<Projects/>}/>
               <Route element={<ProtectedRoute/>}>
-                <Route path="projects" element={<Projects/>}/>
+                
               </Route>
               <Route path='testing' element={<Test/>}/>
 
