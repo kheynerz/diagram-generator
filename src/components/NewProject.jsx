@@ -1,7 +1,8 @@
 import React from 'react'
-import { useContext, useState } from 'react'
-import { StructureContext } from '../context/StructureContext'
+import { useState } from 'react'
 
+
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
@@ -9,27 +10,36 @@ const NewProject = () => {
     const [project, setProject] = useState({nombre:'',description: ''});
   
     const handleChange = (e) => {
-        const {id, value} = e.target
+        const {name, value} = e.target
         setProject({
-          ...project, [id] : value
+          ...project, [name] : value
         });
-        
-        console.log(project);
       };
 
+
+    const handleClick = () => {
+        console.log(project);
+    }
+
     return (
-      <>
+        <Form>
+       
         <FloatingLabel
-          controlId="nombre"
-          label="Nombre proyecto"
           className="mb-3"
+          label="Nombre"
+          controlId="nombre"
         >
-          <Form.Control type="text" placeholder="Nombre Proyecto" onChange={handleChange}/>
+          <Form.Control onChange={handleChange} type="text" placeholder="Nombre proyecto" name="nombre" />
         </FloatingLabel>
-        <FloatingLabel controlId="description" label="Descripción">
-          <Form.Control type="text" placeholder="Descripción" onChange={handleChange}/>
+  
+        <FloatingLabel className="mb-3" label="Descripcion" controlId="description">
+          <Form.Control onChange={handleChange} type="text" placeholder="Descripcion" name="description"/>
         </FloatingLabel>
-      </>
+        
+        <Button onClick={handleClick} variant="primary" size="lg" >
+          Crear
+        </Button>
+      </Form>
     );
 }
 
