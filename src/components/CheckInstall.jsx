@@ -1,40 +1,19 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import axios from 'axios'
-
-const baseURL = "http://localhost:3000";
-
 import CheckInstallModal from './Modals/CheckInstallModal';
+import { useCheckInstall } from '../hooks/useCheckInstall';
+
+import { Snackbar } from './Snackbar';
 
 const CheckInstall = () => {
-    const [modalShow, setModalShow] = useState(false)
+    const {installed, fetching, connected} = useCheckInstall()
 
-    const params = {
-        host: "localhost",
-        database : "test",
-        port : 5432,
-        user : "postgres",
-        password : "1234"
-      };
-
-    useEffect(() => {
-        axios.get(`${baseURL}/install`,{params})
-            .then(res => {
-                if(!res.data.res[0]?.check_schema){
-                    setModalShow(true)
-                }
-            })
-            .catch(err => console.log(err))
-    }, [])
+    if (fetching) return <p>Loading...</p>
+    if (installed) return <Snackbar body='Los procedimientos ya se encuentran instalados' header='Procedimientos Instalados'/>
+    if (connected) return <CheckInstallModal  />
     
 
-    const handleClick = () => {
-        console.log('Hello');
-    }
-
-    return (
-        <CheckInstallModal show={modalShow} onHide={() => setModalShow(false)} onClickInstall={handleClick} />
-  )
+    return  <h1>bad credentials</h1>
 }
 
 export default CheckInstall
+
+

@@ -1,4 +1,5 @@
 import './App.css'
+import CheckInstall from './components/CheckInstall';
 import Login from './components/Login'
 import { CredentialsContextProvider } from './context/CredentialsContext';
 
@@ -7,7 +8,7 @@ import { CredentialsContextProvider } from './context/CredentialsContext';
 const App = () => {
   return (
     <CredentialsContextProvider>
-      <Login/>
+      <CheckInstall/>
     </CredentialsContextProvider>
   );
 }
