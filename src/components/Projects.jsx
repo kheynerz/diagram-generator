@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { useGetProjects } from '../hooks/useGetProjects';
 
 
-const Projects = () => {
+const Project = () => {
     const {projects, fetching} = useGetProjects()
 
     if (fetching) return <h5>Loading</h5>;
@@ -30,4 +30,4 @@ const Projects = () => {
 }
 
 
-export default Projects;
+export default Project;
