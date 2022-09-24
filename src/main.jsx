@@ -5,9 +5,10 @@ import './index.css'
 import Login from '../login/login'
 import Schema from '../Schema/Schema'
 import Tables from '../Tables/Tables'
+import Projects from '../Projects'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Tables />
+    <Projects />
   </React.StrictMode>
 )
