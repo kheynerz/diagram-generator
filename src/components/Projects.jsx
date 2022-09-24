@@ -1,32 +1,30 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useGetProjects } from '../hooks/useGetProjects';
 
-
-const projectsList=[
-    {nombre:'proyecto1', diagramas: {}},
-    {nombre:'proyecto2', diagramas: {}}, 
-    {nombre:'proyecto3', diagramas: {}},
-    {nombre:'proyecto4', diagramas: {}} 
-];
 
 const Schema = () => {
+    const {projects, fetching} = useGetProjects()
 
+    if (fetching) return <h5>Loading</h5>;
+    
     return (
         <>
             <div style={{display: 'flex' , flexWrap:'Wrap'}}>
-                {projectsList.map((project,index) => (
-                    <Card style={{ width: '18rem' , margin:'10px'}}>
+                {projects.length ? projects.map((project,index) => (
+                    <Card key={index} style={{ width: '18rem' , margin:'10px'}}>
                     <Card.Body>
                         <Card.Title>{project.nombre}</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            {project.descripcion}
                         </Card.Text>
                         <Button variant="primary" key={index}>Abrir</Button>
                     </Card.Body>
                     </Card>
-                ))}
+                )): <h3>Primer proyecto: </h3>}
+                <Button variant="primary" style={{ width: '18rem' , margin:'10px', fontSize:'60px'}}>+</Button>
             </div>
+            
         </>
     );
 }
