@@ -3,12 +3,12 @@ import CheckInstall from './components/CheckInstall';
 import Login from './components/Login'
 import { CredentialsContextProvider } from './context/CredentialsContext';
 
-
+import Projects from './components/Projects';
 
 const App = () => {
   return (
     <CredentialsContextProvider>
-      <CheckInstall/>
+      <Projects/>
     </CredentialsContextProvider>
   );
 }

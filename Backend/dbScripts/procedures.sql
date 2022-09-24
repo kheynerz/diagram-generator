@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS plantuml_generated;
 
 CREATE TABLE IF NOT EXISTS plantuml_generated.projects(
 	user_id SERIAL PRIMARY KEY,
-	username varchar(20) UNIQUE NOT NULL,
+	username VARCHAR(20) UNIQUE NOT NULL,
 	projects JSON NOT NULL
 );
 

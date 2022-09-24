@@ -5,7 +5,6 @@ const structureController = require('../controllers/structure')
 
 
 router.get('/structure', (req,res) =>{
-
     structureController.getJson(req.query)
     .then(result => res.json(result))
     .catch(result => res.status(result.code).json(result))

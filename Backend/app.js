@@ -17,12 +17,13 @@ app.use(cors())
 const index = require('./routes/index');
 const install = require('./routes/install');
 const structure = require('./routes/structure');
+const projects = require('./routes/projects');
 
 //Endpoints
 app.use('/', index)
 app.use('/', install)
 app.use('/', structure)
-
+app.use('/', projects)
 
   
 module.exports = app;
