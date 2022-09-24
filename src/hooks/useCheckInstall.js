@@ -3,7 +3,6 @@ import { CredentialsContext } from "../context/CredentialsContext"
 
 import { getService } from "../services/http_requests"
 
-
 export const useCheckInstall = () => {
     const [installed, setInstalled] = useState(false) 
     const [fetching, setFetching] = useState(true) 
@@ -17,9 +16,7 @@ export const useCheckInstall = () => {
 
     useEffect(() => {
         getService('install', {params})
-            .then(res => {
-                handleResponse(res.data)}
-            )
+            .then(res =>  handleResponse(res.data))
             .finally(_ => setFetching(false))
     }, []);
 

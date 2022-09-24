@@ -24,7 +24,6 @@ const CheckInstallModal = () => {
   }
 
   if (showAlert) return <Snackbar body='Instalacion completada' header='Completado' variant='success' />
-  
 
   return (
       <Modal
