@@ -1,10 +1,25 @@
-import React from 'react'
-
+import React, {useContext}  from 'react'
+import { CredentialsContext } from '../context/CredentialsContext';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
+
 const Login = () => {
+
+  const {credentials} = useContext(CredentialsContext);
+  const {setCredentials} = useContext(CredentialsContext);
+
+  const [loginData, updateLoginData] = React.useState(credentials);
+
+  const handleChange = (e) => {
+    updateLoginData({
+      ...loginData,
+
+      // Recortar cualquier espacio en blanco
+      [e.target.name]: e.target.value.trim()
+    });
+  };
 
   return (
     <Form>
@@ -13,7 +28,7 @@ const Login = () => {
         label="Direccion del servidor"
         className="mb-3"
       >
-        <Form.Control type="text" placeholder="Dirección del servidor" />
+        <Form.Control onChange={handleChange} type="text" placeholder="Dirección del servidor" name="direccion"/>
       </FloatingLabel>
 
       <FloatingLabel
@@ -21,7 +36,7 @@ const Login = () => {
         label="Nombre de BD"
         controlId="formBasicNombre"
       >
-        <Form.Control type="text" placeholder="Nombre de base de datos" />
+        <Form.Control onChange={handleChange} type="text" placeholder="Nombre de base de datos" name="nombre"/>
       </FloatingLabel>
 
       <FloatingLabel
@@ -29,7 +44,7 @@ const Login = () => {
         label="Puerto"
         controlId="formBasicPuerto"
       >
-        <Form.Control type="text" placeholder="Puerto" />
+        <Form.Control onChange={handleChange} type="text" placeholder="Puerto" name="puerto" />
       </FloatingLabel>
 
       <FloatingLabel
@@ -37,15 +52,20 @@ const Login = () => {
         label="Usuario"
         controlId="formBasicUsuario"
       >
-        <Form.Control type="text" placeholder="Usuario" />
+        <Form.Control onChange={handleChange} type="text" placeholder="Usuario" name="usuario" />
       </FloatingLabel>
 
       <FloatingLabel className="mb-3" label="Clave" controlId="formBasicClave">
-        <Form.Control type="text" placeholder="Clave" />
+        <Form.Control onChange={handleChange} type="text" placeholder="Clave" name="clave"/>
       </FloatingLabel>
-      <Button variant="primary" size="lg">
+      <Button onClick={() => setCredentials(loginData)} variant="primary" size="lg" >
         Conectar
       </Button>
+      <pre>
+        {console.log(credentials)}
+      </pre>
+      
+      
     </Form>
   )
 }
