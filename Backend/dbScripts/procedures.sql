@@ -72,8 +72,13 @@ BEGIN
 											'"constraint_name" : "' || constr_name  || '",' ||
 											'"foreign_schema" : "' || fn_ts  || '",' ||
 											'"foreign_table" : "' || fn_tn  || '",' ||
-											'"foreign_col" : "' || fn_col  || '"},';
-			
+											'"foreign_col" : "' || fn_col  || '",' ||
+											'"card_l" : "",' ||
+											'"card_r" : "",' ||
+											'"rol_l" : "",' ||
+											'"rol_r" : "",' ||
+											'"type" : "2",' ||
+											'"activated" : true},';
 			constraint_found := true;
 			
 		END LOOP;
@@ -116,7 +121,7 @@ BEGIN
 		FETCH v_schemas INTO v_schema;
 		IF FOUND THEN
 			v_tables_found = 'false';
-			v_json := v_json || '{"nombre" : "'||v_schema || '",' || '"tablas": [';
+			v_json := v_json || '{"nombre" : "'|| v_schema || '",' || '"activated" : true,' || '"tablas": [';
 			OPEN v_tables FOR SELECT table_name::VARCHAR, table_schema::VARCHAR
 						FROM information_schema.tables
 						WHERE table_type = 'BASE TABLE' AND table_schema = v_schema;
@@ -125,7 +130,7 @@ BEGIN
 				IF FOUND THEN
 					v_tables_found = 'true';
 					v_columns_found = 'false';
-					v_json := v_json || '{' || '"nombre" : "' || v_table_name || '",' || '"atributos" : [';
+					v_json := v_json || '{' || '"nombre" : "' || v_table_name || '", "activated" : true, ' || '"atributos" : [';
 					OPEN v_columns FOR SELECT column_name::VARCHAR, data_type::VARCHAR 
 						FROM information_schema.columns 
 						WHERE table_name = v_table_name AND table_schema = v_table_schema;
@@ -133,7 +138,7 @@ BEGIN
 						FETCH v_columns into v_column_name, v_data_type;
 						IF FOUND THEN
 							v_columns_found = 'true';
-							v_json := v_json || '{' || '"nombre" : "' || v_column_name || '","dato" : "' || v_data_type || '"},';
+							v_json := v_json || '{' || '"nombre" : "' || v_column_name || '", "activated" : true, "dato" : "' || v_data_type || '"},';
 						ELSE
 							RAISE NOTICE '%',v_columns_found;	
 							IF v_columns_found THEN
