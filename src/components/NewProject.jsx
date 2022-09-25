@@ -9,7 +9,7 @@ import { newProjects } from '../helpers/projects';
 import { ProjectContext } from '../context/ProjectContext';
 
 const NewProject = () => {
-    const [project, setProject] = useState({nombre:'',descripcion: '',diagramas:{}});
+    const [project, setProject] = useState({nombre:'',descripcion: '',diagramas:[]});
     const credentials = useContext(CredentialsContext).credentials
     const {projects, setProjects} = useContext(ProjectContext) 
   
