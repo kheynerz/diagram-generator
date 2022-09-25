@@ -16,3 +16,10 @@ export const postService = (endpoint, options) => {
         .then(res => res.data)
         .catch(err => {throw Error(err)} )
 }
+
+export const putService = (endpoint, options) => {
+    return axios
+        .put(URL+endpoint, options)
+        .then(res => res.data)
+        .catch(err => {throw Error(err)} )
+}
