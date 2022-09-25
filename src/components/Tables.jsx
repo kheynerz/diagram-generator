@@ -4,10 +4,15 @@ import { useEffect, useContext,useState } from 'react';
 import { StructureContext } from '../context/StructureContext'
 import { DiagramContext } from '../context/DiagramContext'
 
+import UpdateConstraintModal from './Modals/UpdateContraintModal';
+
 const Tables = ({schema, updateTable}) => {
   const { getTable : getTableStructure } = useContext(StructureContext);
   const { getTable } = useContext(DiagramContext);
   const [tables, setTables] = useState([])
+  
+  const [modal, setModal] = useState(false)
+  const [contraint, setContraint] = useState({})
 
   useEffect(() => {
     let tableData = getTable(schema.nombre)
@@ -65,7 +70,6 @@ const Tables = ({schema, updateTable}) => {
   }, [tables])
   
 
-
   const handleChange = (e, tabla) => {
     const {name, checked} = e.target
     setTables(tables.map((t)=>{
@@ -92,15 +96,44 @@ const Tables = ({schema, updateTable}) => {
     }))
   }
 
-  const handleConstChange = (e, tabla) => {
+  const handleConstChange = (e,c,index) => {
+    const {checked} = e.target;
+
+    setTables([...tables].map((t) => {
+      if(t.nombre === c.table){
+        let consts = t.constraints.map((con, i) => ({...con, activated : i === index ? checked : con.activated}))
+        return {...t, constraints : consts}
+      }
+      return t
+    }))
 
   }
 
+
+
+  const handleClick = (_, c) => {
+    setContraint(c)
+    setModal(true)
+  }
+
+  const updateConstraint = (c) => {
+    setTables([...tables].map(t => {
+      let cons = t.constraints.map((con) => {
+        if (con.constraint_name === c.constraint_name){
+          return c
+        }
+        return con
+      })
+      return {...t, constraints : cons}
+    })
+    );
+  }
 
   if(tables.length === 0) return <h4>No hay tablas en el esquema</h4>
 
   return (
     <>
+    {modal && <UpdateConstraintModal c={contraint} updateConstraint={updateConstraint}/>}
     <Form onSubmit={(e) => e.preventDefault()}   style={{display: 'flex' , flexWrap:'Wrap'}}>  
         {tables.map((tabla,index)=>{
                 return  <ListGroup style={{margin:'10px'}} key={index}>
@@ -120,7 +153,12 @@ const Tables = ({schema, updateTable}) => {
                               {tabla.constraints.map((c,j) => {
                                 let label = `${c.schema !== 'public' ? c.schema+'.' : '' }${c.table} -->`
                                 label += `${c.foreign_schema !== 'public' ? c.foreign_schema+'.' : ''}${c.foreign_table}`
-                                return <Form.Check type="switch" key={j} label={label} defaultChecked={true} onChange={(e) => handleConstChange(e,tabla.nombre)}/>
+                                return <div key={j} >
+                                  <Form.Check  type="switch"  label={label} defaultChecked={true} name={j} onChange={(e) => handleConstChange(e,c, j)}/>
+                                    <button style={{fontSize : '5px', marginLeft : '5px', border: 'none', backgroundColor: 'white'}} onClick={(e) => handleClick(e, c)} >
+                                      <img src='/src/assets/edit.svg'></img>  
+                                    </button>
+                                </div>
                               })}
                             </ListGroup.Item> 
 

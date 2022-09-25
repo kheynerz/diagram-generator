@@ -14,7 +14,7 @@ const ShowDiagram = () => {
             <PlantImage />
         </div>
         <Button variant="primary" size="lg" style={{marginTop: '15px'}} onClick={() => setBack(true)}>
-            Volver a proyectos
+            Volver
         </Button>
     </>
     ); 

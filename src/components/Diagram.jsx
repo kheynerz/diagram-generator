@@ -43,7 +43,10 @@ const Diagram = () => {
     setSchemas(newSchemas);
   }, []);
 
+
+
   if (selectSchema)  return <Schema schemas={schemas} setSchemas={setSchemas} setSelectSchema={setSelectSchema}/>;
+ 
   if (selectTables) return (
     <>
       {schemas.map((schema, i) => (
