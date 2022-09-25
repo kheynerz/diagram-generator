@@ -8,6 +8,7 @@ const checkCredentials = (config) => {
 
 exports.execute = (config, query, rejMsg, resolveMsg) => {
   if (!checkCredentials(config)) {
+    console.log(config);
     const promise = new Promise((_, reject) => {
       reject({msg: 'Some credentials were not provided', res: false, connect : false, success: false})
     })

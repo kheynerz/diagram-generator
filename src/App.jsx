@@ -2,6 +2,7 @@ import './App.css'
 import { CredentialsContextProvider } from './context/CredentialsContext';
 import { AuthContextProvider } from './context/AuthContext'
 import { StructureContextProvider } from './context/StructureContext'
+import { ProjectContextProvider } from './context/ProjectContext';
 
 import { DiagramContextProvider } from './context/DiagramContext'
 
@@ -19,23 +20,23 @@ const App = () => {
     <CredentialsContextProvider>
       <AuthContextProvider>
         <StructureContextProvider>
-          <DiagramContextProvider>
-            
-          <Router>
-            <Routes>
-              <Route index element={<Login />} />
-              <Route path="/login" element={<Login />} />
-              <Route element={<ProtectedRoute/>}>
-              
-              </Route>
-              <Route path='diagram' element={<Test/>}/>
-              <Route path="projects" element={<Projects/>}/>
-              {/* <Route path="newProject" element={<NewProject/>}/> */}
-              <Route path="showdiagram" element={<ShowDiagram/>}/>
-            </Routes>
-          </Router>
-          
-          </DiagramContextProvider>
+          <ProjectContextProvider>
+            <DiagramContextProvider>
+              <Router>
+                <Routes>
+                  <Route index element={<Login />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route element={<ProtectedRoute/>}>
+                  
+                  </Route>
+                  <Route path='diagram' element={<Test/>}/>
+                  <Route path="projects" element={<Projects/>}/>
+                  {/* <Route path="newProject" element={<NewProject/>}/> */}
+                  <Route path="showdiagram" element={<ShowDiagram/>}/>
+                </Routes>
+              </Router>
+            </DiagramContextProvider>
+          </ProjectContextProvider>
         </StructureContextProvider>
       </AuthContextProvider>
     </CredentialsContextProvider>
