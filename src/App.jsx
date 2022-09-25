@@ -2,6 +2,7 @@ import './App.css'
 import { CredentialsContextProvider } from './context/CredentialsContext';
 import { AuthContextProvider } from './context/AuthContext'
 import { StructureContextProvider } from './context/StructureContext'
+import { ProjectContextProvider } from './context/ProjectContext';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -17,19 +18,22 @@ const App = () => {
     <CredentialsContextProvider>
       <AuthContextProvider>
         <StructureContextProvider>
-          <Router>
-            <Routes>
-              <Route index element={<Login />} />
-              <Route path="/login" element={<Login />} />
-              <Route element={<ProtectedRoute/>}>
-              
-              </Route>
-              <Route path='testing' element={<Test/>}/>
-              <Route path="projects" element={<Projects/>}/>
-              <Route path="newProject" element={<NewProject/>}/>
+          <ProjectContextProvider>
+            <Router>
+              <Routes>
+                <Route index element={<Login />} />
+                <Route path="/login" element={<Login />} />
+                <Route element={<ProtectedRoute/>}>
+                
+                </Route>
+                <Route path='testing' element={<Test/>}/>
+                <Route path="projects" element={<Projects/>}/>
+                <Route path="newProject" element={<NewProject/>}/>
 
-            </Routes>
-          </Router>
+              </Routes>
+            </Router>
+          
+          </ProjectContextProvider>
         </StructureContextProvider>
       </AuthContextProvider>
     </CredentialsContextProvider>
