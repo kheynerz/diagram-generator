@@ -3,20 +3,24 @@ import { CredentialsContextProvider } from './context/CredentialsContext';
 import { AuthContextProvider } from './context/AuthContext'
 import { StructureContextProvider } from './context/StructureContext'
 
+import { DiagramContextProvider } from './context/DiagramContext'
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import Test from './components/Test';
 import Login from './components/Login'
 
 import Projects from './components/Projects';
-import NewProject from './components/NewProject';
+import Test from './components/Test';
+import ShowDiagram from './components/ShowDiagram';
 
 const App = () => {
   return (
     <CredentialsContextProvider>
       <AuthContextProvider>
         <StructureContextProvider>
+          <DiagramContextProvider>
+            
           <Router>
             <Routes>
               <Route index element={<Login />} />
@@ -24,12 +28,14 @@ const App = () => {
               <Route element={<ProtectedRoute/>}>
               
               </Route>
-              <Route path='testing' element={<Test/>}/>
+              <Route path='diagram' element={<Test/>}/>
               <Route path="projects" element={<Projects/>}/>
-              <Route path="newProject" element={<NewProject/>}/>
-
+              {/* <Route path="newProject" element={<NewProject/>}/> */}
+              <Route path="showdiagram" element={<ShowDiagram/>}/>
             </Routes>
           </Router>
+          
+          </DiagramContextProvider>
         </StructureContextProvider>
       </AuthContextProvider>
     </CredentialsContextProvider>

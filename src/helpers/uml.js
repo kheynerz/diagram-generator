@@ -3,20 +3,24 @@ import { encode } from "plantuml-encoder"
 export const getUrl = (uml) => `https://www.plantuml.com/plantuml/svg/${encode(uml)}`
 
 
-export const parseUML = (schemes) => {
+export const parseUML = ({schemas}) => {
     let uml = '@startuml'
     let constraints = []
 
-    schemes.forEach(({nombre, tablas}) => {
+    console.log(schemas);
+    schemas.forEach(({nombre, tablas, activated}) => {
+     
+      if (activated){
         tablas.forEach(e => {
-            uml += `\nobject ${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre}`
-            e.atributos.forEach(a => {
-              uml += `\n${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre} : ${a.nombre} : ${a.dato}`
-            })
-            e.constraints.forEach(c => {
-              constraints.push(c)
-            })
-        });
+          uml += `\nobject ${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre}`
+          e.atributos.forEach(a => {
+            uml += `\n${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre} : ${a.nombre} : ${a.dato}`
+          })
+          /*e.constraints.forEach(c => {
+            constraints.push(c)
+          }) */
+      });
+      }
     })
 
     constraints.forEach(c => {
