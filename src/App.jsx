@@ -27,12 +27,10 @@ const App = () => {
                   <Route index element={<Login />} />
                   <Route path="/login" element={<Login />} />
                   <Route element={<ProtectedRoute/>}>
-                  
+                    <Route path='/diagram' element={<Test/>}/>
+                    <Route path="/projects" element={<Projects/>}/>
+                    <Route path="/showdiagram" element={<ShowDiagram/>}/>
                   </Route>
-                  <Route path='diagram' element={<Test/>}/>
-                  <Route path="projects" element={<Projects/>}/>
-                  {/* <Route path="newProject" element={<NewProject/>}/> */}
-                  <Route path="showdiagram" element={<ShowDiagram/>}/>
                 </Routes>
               </Router>
             </DiagramContextProvider>

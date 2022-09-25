@@ -9,7 +9,6 @@ import Install from './Install';
 const CheckInstall = () => {
     const {installed, fetching, connected} = useCheckInstall()
     const {setAuth} = useContext(AuthContext)
-
     
     const BadCredentials = () => {
         useEffect(() => {

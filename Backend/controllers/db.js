@@ -8,7 +8,6 @@ const checkCredentials = (config) => {
 
 exports.execute = (config, query, rejMsg, resolveMsg) => {
   if (!checkCredentials(config)) {
-    console.log(config);
     const promise = new Promise((_, reject) => {
       reject({msg: 'Some credentials were not provided', res: false, connect : false, success: false})
     })
@@ -19,8 +18,6 @@ exports.execute = (config, query, rejMsg, resolveMsg) => {
   const promise = new Promise((resolve, reject) => {
     client.connect(async (err) => {
       if (err) {
-        console.log('Error de conexion');
-
         reject({msg: 'Bad Credentials', res: false, connect : false, success: false});
       } else {
         client.query(query)

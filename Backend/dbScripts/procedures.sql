@@ -182,9 +182,9 @@ AS $$
 DECLARE
     checked BOOL;
 BEGIN 
-    SELECT (COUNT(routine_name) = 4) from information_schema.routines
+    SELECT (COUNT(routine_name) = 5) from information_schema.routines
     WHERE routines.specific_schema='plantuml_generated'
-        AND routine_name in ('get_schemas', 'get_constraints', 'get_json', 'get_projects')
+        AND routine_name in ('get_schemas', 'get_constraints', 'get_json','get_projects', 'set_projects')
     INTO checked;
     RETURN checked;
 END
@@ -212,6 +212,27 @@ BEGIN
 	END IF; 
 	
 	RETURN projectsJson;
+END
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION plantuml_generated.set_projects(p_username varchar, p_projects json)
+RETURNS BOOL
+SECURITY DEFINER
+AS $$
+DECLARE
+    checked BOOL;
+BEGIN 
+	SELECT (COUNT(username) = 1) FROM plantuml_generated.projects WHERE username = p_username into checked;
+	
+	IF checked THEN
+		UPDATE plantuml_generated.projects SET projects = p_projects WHERE username = p_username;
+	ELSE 
+		INSERT INTO plantuml_generated.projects (username, projects) values (p_username, p_projects);
+	END IF;
+	
+	RETURN checked;
 END
 $$
 LANGUAGE 'plpgsql';

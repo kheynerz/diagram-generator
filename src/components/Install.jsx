@@ -7,7 +7,7 @@ const Install = () => {
     useEffect(() => {
         setAuth(true)
     }, [])
-    return <Navigate to='/testing'/>
+    return <Navigate to='/projects'/>
 }
 
 export default Install;

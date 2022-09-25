@@ -8,7 +8,7 @@ export const CredentialsContextProvider = (props) =>{
       database: "test",
       port: "5432",
       user: "postgres",
-      password: "12345",
+      password: "1234",
     });
 
     return(
