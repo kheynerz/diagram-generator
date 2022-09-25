@@ -4,7 +4,7 @@ import { useEffect, useContext,useState } from 'react';
 import { StructureContext } from '../context/StructureContext'
 import { DiagramContext } from '../context/DiagramContext'
 
-const Tables = ({schema, addTable}) => {
+const Tables = ({schema, updateTable}) => {
   const { getTable : getTableStructure } = useContext(StructureContext);
   const { getTable } = useContext(DiagramContext);
   const [tables, setTables] = useState([])
@@ -33,7 +33,7 @@ const Tables = ({schema, addTable}) => {
                 return { ...tsa, activated: false };
               }
             });
-            activatedTables.push({nombre: td.nombre, atributos, activated : true})
+            activatedTables.push({nombre: td.nombre,atributos,  constraints: td.constraints,  activated : true})
             return true
           }
         })
@@ -44,6 +44,7 @@ const Tables = ({schema, addTable}) => {
        let newTables = disabledTables.map((t) => ({
         nombre: t.nombre,
         atributos : t.atributos.map((a) => ({...a, activated : false})),
+        constraints: t.constraints,
         activated: false,
       }));
       
@@ -60,7 +61,7 @@ const Tables = ({schema, addTable}) => {
   }, [])
 
   useEffect(() => {
-    addTable(schema, tables)
+    updateTable(schema, tables)
   }, [tables])
   
 
@@ -91,6 +92,11 @@ const Tables = ({schema, addTable}) => {
     }))
   }
 
+  const handleConstChange = (e, tabla) => {
+
+  }
+
+
   if(tables.length === 0) return <h4>No hay tablas en el esquema</h4>
 
   return (
@@ -99,13 +105,25 @@ const Tables = ({schema, addTable}) => {
         {tables.map((tabla,index)=>{
                 return  <ListGroup style={{margin:'10px'}} key={index}>
                             <ListGroup.Item >
-                                <Form.Check type="switch"  label={tabla.nombre} name={tabla.nombre} defaultChecked={tabla.activated} onChange={handleTableChange}/>
+                                <Form.Check style={{display : 'inline'}} type="switch"  name={tabla.nombre} defaultChecked={tabla.activated} onChange={handleTableChange}/>
+                                <h5 style={{display : 'inline', marginLeft: '10px'}}>{tabla.nombre}</h5>
                             </ListGroup.Item>  
                             <ListGroup.Item>
                               {tabla.atributos.map(({nombre, dato, activated},j) => {
                                 return <Form.Check type="switch" key={j} label={`${nombre} : ${dato}`} name={nombre} defaultChecked={activated} onChange={(e) => handleChange(e,tabla.nombre)}/>
                               })}
                             </ListGroup.Item> 
+                            <ListGroup.Item>
+                                <h6>Constraints</h6>
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                              {tabla.constraints.map((c,j) => {
+                                let label = `${c.schema !== 'public' ? c.schema+'.' : '' }${c.table} -->`
+                                label += `${c.foreign_schema !== 'public' ? c.foreign_schema+'.' : ''}${c.foreign_table}`
+                                return <Form.Check type="switch" key={j} label={label} defaultChecked={true} onChange={(e) => handleConstChange(e,tabla.nombre)}/>
+                              })}
+                            </ListGroup.Item> 
+
                         </ListGroup>
             })}
         

@@ -5,7 +5,7 @@ export const CredentialsContext = createContext();
 export const CredentialsContextProvider = (props) =>{
     const [credentials, setCredentials] = useState({
       host: "localhost",
-      database: "plant",
+      database: "test",
       port: "5432",
       user: "postgres",
       password: "1234",

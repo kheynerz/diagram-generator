@@ -8,17 +8,72 @@ export const DiagramContextProvider = (props) =>{
       schemas: [
         {
           nombre: "public",
-          activated: true,
           tablas: [
             {
               nombre: "personas",
-              atributos: [{ nombre: "cedula", dato: "integer" }],
-              constraints: []
+              atributos: [
+                { nombre: "id", dato: "integer" },
+                { nombre: "nombre", dato: "character varying" },
+              ],
+              constraints: [],
             },
             {
-                nombre: "personas2",
-                atributos: [{ nombre: "nombre", dato: "character varying" }],
-                constraints: []
+              nombre: "telefonos",
+              atributos: [
+                { nombre: "idpersona", dato: "integer" },
+                { nombre: "telefono", dato: "integer" },
+              ],
+              constraints: [
+                {
+                  schema: "public",
+                  table: "telefonos",
+                  col: "idpersona",
+                  constraint_name: "fk_telefonos",
+                  foreign_schema: "public",
+                  foreign_table: "personas",
+                  foreign_col: "id",
+                },
+                {
+                  schema: "public",
+                  table: "telefonos",
+                  col: "idpersona",
+                  constraint_name: "fk_tel_pers2",
+                  foreign_schema: "public",
+                  foreign_table: "pers2",
+                  foreign_col: "idper",
+                },
+              ],
+            },
+            {
+              nombre: "pers2",
+              atributos: [
+                { nombre: "idper", dato: "integer" },
+                { nombre: "name", dato: "character varying" },
+              ],
+              constraints: [],
+            },
+          ],
+        },
+        {
+          nombre: "esq",
+          tablas: [
+            {
+              nombre: "personajes",
+              atributos: [
+                { nombre: "identificadcor", dato: "integer" },
+                { nombre: "nombre", dato: "character varying" },
+              ],
+              constraints: [
+                {
+                  schema: "esq",
+                  table: "personajes",
+                  col: "identificadcor",
+                  constraint_name: "fk_esqper_id",
+                  foreign_schema: "public",
+                  foreign_table: "personas",
+                  foreign_col: "id",
+                },
+              ],
             },
           ],
         },

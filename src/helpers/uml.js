@@ -6,25 +6,33 @@ export const getUrl = (uml) => `https://www.plantuml.com/plantuml/svg/${encode(u
 export const parseUML = ({schemas}) => {
     let uml = '@startuml'
     let constraints = []
+    let activatedTables = []
 
-    console.log(schemas);
     schemas.forEach(({nombre, tablas, activated}) => {
-     
       if (activated){
-        tablas.forEach(e => {
-          uml += `\nobject ${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre}`
-          e.atributos.forEach(a => {
-            uml += `\n${nombre === 'public' ? e.nombre : nombre+'.'+e.nombre} : ${a.nombre} : ${a.dato}`
-          })
-          /*e.constraints.forEach(c => {
+        tablas.forEach(t => {
+          if(t?.activated){
+            uml += `\nobject ${nombre === 'public' ? t.nombre : nombre+'.'+t.nombre}`
+            activatedTables.push(`${nombre === 'public' ? t.nombre : nombre+'.'+t.nombre}`)
+            t.atributos.forEach(a => {
+              if(a?.activated){
+                uml += `\n${nombre === 'public' ? t.nombre : nombre+'.'+t.nombre} : ${a.nombre} : ${a.dato}`
+              }
+            })
+          }
+          t.constraints.forEach(c => {
             constraints.push(c)
-          }) */
+          })
       });
       }
     })
 
     constraints.forEach(c => {
-       uml += `\n${c.foreign_schema === 'public' ? c.foreign_table: c.foreign_table +'.'+ c.foreign_table} <|-- ${c.schema === 'public' ? c.table : c.schema+'.'+c.table}`
+      let foreign_table = `${c.foreign_schema === 'public' ? c.foreign_table: c.foreign_table +'.'+ c.foreign_table}`
+      let table = `${c.schema === 'public' ? c.table : c.schema+'.'+c.table}`
+      if (activatedTables.includes(foreign_table) && activatedTables.includes(table)) {
+        uml += `\n${foreign_table} <|-- ${table}`
+      }
     })
 
     uml += '\n@enduml'
