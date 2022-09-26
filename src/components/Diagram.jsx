@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
+import { CredentialsContext } from '../context/CredentialsContext'; 
 import { StructureContext } from '../context/StructureContext'
 import { DiagramContext } from '../context/DiagramContext'
 import { ProjectContext } from '../context/ProjectContext'
@@ -53,7 +54,6 @@ const Diagram = ({diaIndex, pIndex}) => {
   useEffect(() => {
     newProjects(credentials, projects)
   }, [projects]);
-
 
   useEffect(() => {
     let newSchemas = [...diagram.schemas];
