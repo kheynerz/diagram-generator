@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createContext,useState} from "react";
 
 export const DiagramContext = createContext();
@@ -14,7 +15,12 @@ export const DiagramContextProvider = (props) =>{
 
         return table
     }
-
+    
+    useEffect(() => {
+        console.log(diagram)
+    }, [diagram])
+   
+    
     return(
         <DiagramContext.Provider  value={{diagram,setDiagram,getTable}}>
             {props.children}

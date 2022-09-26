@@ -38,20 +38,18 @@ const Diagram = ({diaIndex, pIndex}) => {
   const saveDiagram = () => {
     const dia = {...diagram, schemas : [...schemas]}
     
-    const newProjects = [...projects].map((p,i) => {
-      if (i === pIndex){
-        let diagramas = p.diagramas.map((d,j) => {
-          if (j === diaIndex){
-            return dia
-          }
-          return d
-        })
-        return {...p, diagramas}
-      }
-      return p
-    })
+    let newProject = projects[pIndex]
+    newProject.diagramas = newProject.diagramas.length ? [...newProject.diagramas, dia] : [dia]
 
+    let newProjects = [...projects]
+    newProjects.splice(pIndex, 1)
+    newProjects.splice(pIndex, 0, newProject);
+
+    console.log(newProjects);
     setProjects(newProjects)
+
+
+    //setProjects(newPro)
   }
 
   useEffect(() => {

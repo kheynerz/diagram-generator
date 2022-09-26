@@ -26,6 +26,7 @@ const NewProject = () => {
     } 
 
     useEffect(() => {
+      console.log("Se actualizo proyectos");
       newProjects(credentials, projects)
     }, [projects]);
 
