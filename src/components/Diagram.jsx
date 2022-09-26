@@ -1,15 +1,19 @@
 import { useEffect, useState, useContext } from 'react'
 import { StructureContext } from '../context/StructureContext'
 import { DiagramContext } from '../context/DiagramContext'
+import { ProjectContext } from '../context/ProjectContext'
+
 
 import Button from 'react-bootstrap/Button';
 import Schema from './Schema'
 import Tables from './Tables'
 import { Navigate } from 'react-router';
 
-const Diagram = () => {
+const Diagram = ({diaIndex, pIndex}) => {
   const { structure } = useContext(StructureContext);
-  const { diagram, setDiagram } = useContext(DiagramContext);
+  const {diagram, setDiagram } = useContext(DiagramContext);
+  const { projects, setProjects } = useContext(ProjectContext);
+
   const [schemas, setSchemas] = useState([]);
 
   const [selectSchema, setSelectSchema] = useState(true);
@@ -31,6 +35,25 @@ const Diagram = () => {
     }))
   }
 
+  const saveDiagram = () => {
+    const dia = {...diagram, schemas : [...schemas]}
+    
+    const newProjects = [...projects].map((p,i) => {
+      if (i === pIndex){
+        let diagramas = p.diagramas.map((d,j) => {
+          if (j === diaIndex){
+            return dia
+          }
+          return d
+        })
+        return {...p, diagramas}
+      }
+      return p
+    })
+
+    setProjects(newProjects)
+  }
+
   useEffect(() => {
     let newSchemas = [...diagram.schemas];
     let diagramSchemas = newSchemas.map((s) => s.nombre);
@@ -42,8 +65,6 @@ const Diagram = () => {
     });
     setSchemas(newSchemas);
   }, []);
-
-
 
   if (selectSchema)  return <Schema schemas={schemas} setSchemas={setSchemas} setSelectSchema={setSelectSchema}/>;
  
@@ -57,7 +78,11 @@ const Diagram = () => {
       ))}
 
       <Button variant="primary" size="lg" onClick={handleClick}>
-        Generar
+        Mostrar 
+      </Button>
+
+      <Button style={{marginLeft : '50px'}}variant="primary" size="lg" onClick={saveDiagram}>
+        Guardar
       </Button>
     </>
   );

@@ -15,6 +15,10 @@ const NewDiagram = ({pIndex}) => {
     const {projects, setProjects} = useContext(ProjectContext) 
     const {structure} = useContext(StructureContext)
   
+    useEffect(() => {
+      setDiagram({nombre:'',schemas: [...structure]})
+    }, [])
+
     const handleChange = (e) => {
         const {name, value} = e.target
         setDiagram({
@@ -40,9 +44,7 @@ const NewDiagram = ({pIndex}) => {
         newProjects(credentials, projects)
     }, [projects]);
 
-    useEffect(() => {
-        setDiagram({nombre:'',schemas: [...structure]})
-    }, [])
+
     
 
     return (
