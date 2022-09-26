@@ -27,10 +27,8 @@ const App = () => {
                 <Routes>
                   <Route index element={<Login />} />
                   <Route path="/login" element={<Login />} />
-                  <Route path="/projects" element={<Projects/>}/>
-                  <Route path="/diagrams" element={<ProjectDiagrams/>}/>
                   <Route element={<ProtectedRoute/>}>
-                    <Route path='/diagram' element={<Test/>}/>
+                    <Route path="/projects" element={<Projects/>}/>
                     <Route path="/showdiagram" element={<ShowDiagram/>}/>
                   </Route>
                 </Routes>

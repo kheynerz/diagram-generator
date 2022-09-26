@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from 'react'
 import { StructureContext } from '../context/StructureContext'
 import { DiagramContext } from '../context/DiagramContext'
 import { ProjectContext } from '../context/ProjectContext'
-
+import { newProjects } from '../helpers/projects'
+import { CredentialsContext } from '../context/CredentialsContext'
 
 import Button from 'react-bootstrap/Button';
 import Schema from './Schema'
@@ -11,6 +12,7 @@ import { Navigate } from 'react-router';
 
 const Diagram = ({diaIndex, pIndex}) => {
   const { structure } = useContext(StructureContext);
+  const { credentials} = useContext(CredentialsContext);
   const {diagram, setDiagram } = useContext(DiagramContext);
   const { projects, setProjects } = useContext(ProjectContext);
 
@@ -37,20 +39,21 @@ const Diagram = ({diaIndex, pIndex}) => {
 
   const saveDiagram = () => {
     const dia = {...diagram, schemas : [...schemas]}
-    
+
     let newProject = projects[pIndex]
-    newProject.diagramas = newProject.diagramas.length ? [...newProject.diagramas, dia] : [dia]
+    newProject.diagramas[diaIndex] = dia
 
     let newProjects = [...projects]
     newProjects.splice(pIndex, 1)
     newProjects.splice(pIndex, 0, newProject);
 
-    console.log(newProjects);
     setProjects(newProjects)
-
-
-    //setProjects(newPro)
   }
+
+  useEffect(() => {
+    newProjects(credentials, projects)
+  }, [projects]);
+
 
   useEffect(() => {
     let newSchemas = [...diagram.schemas];
