@@ -106,7 +106,7 @@ const UpdateConstraintModal = ({c, updateConstraint}) => {
 
         <h5>Roles</h5>
         <div style={{ display: "flex" }}>
-          <FloatingLabel
+          {/* <FloatingLabel
             controlId="rol_l"
             label="Rol izquierda"
             className="mb-3"
@@ -118,17 +118,17 @@ const UpdateConstraintModal = ({c, updateConstraint}) => {
               defaultValue={constraint.rol_l}
               onChange={handleChange}
             />
-          </FloatingLabel>
+          </FloatingLabel> */}
 
           <FloatingLabel
             style={{ marginLeft: "10px" }}
             controlId="rol_r"
-            label="Rol derecha"
+            label="Rol"
             className="mb-3"
           >
             <Form.Control
               type="text"
-              placeholder="Rol derecha"
+              placeholder="Rol"
               name="rol_r"
               defaultValue={constraint.rol_r}
               onChange={handleChange}

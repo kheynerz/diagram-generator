@@ -35,9 +35,16 @@ export const parseUML = ({schemas}) => {
       let table = `${c.schema === 'public' ? c.table : c.schema+'.'+c.table}`
       let arrowTypes = ['<|--','o--', '<--', '*--']
 
-      console.log(foreign_table, table);
+      console.log(foreign_table, table, c);
+
+      let cardinalL = (c.card_l !== '') ? `"${c.card_l}"` : ''
+      let cardinalR = (c.card_r !== '') ? `"${c.card_r}"` : ''
+
+      let rolL = (c.rol_l !== '') ? `"${c.rol_l}"` : ''
+      let rolR = (c.rol_r !== '') ? `: "${c.rol_r}"` : ''
+
       if (activatedTables.includes(foreign_table) && activatedTables.includes(table)) {
-        uml += `\n${foreign_table} ${arrowTypes[c.type]} ${table}`
+        uml += `\n ${foreign_table}  ${cardinalR} ${arrowTypes[c.type]} ${cardinalL} ${table} ${rolR}`
       }
     })
 
